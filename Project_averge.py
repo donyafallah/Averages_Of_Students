@@ -55,8 +55,50 @@ def calculate_three_best(input_file_name, output_file_name):
             writer.writerow([ list_keys[i] , sorted_dictionary[list_keys[i]]])
 
 
+def calculate_three_worst(input_file_name, output_file_name):
+    dictionary = OrderedDict()
+    with open(input_file_name , 'r') as f :
+        reader = csv.reader(f)
+        rows = list(reader)
+    with open(output_file_name , 'w' , newline='') as k :
+        writer = csv.writer(k)
+        for row in rows :
+            name = row[0]    
+            list_grades = []
+            for grade in row[1:] :
+                list_grades.append(float(grade))
+            dictionary[name] = mean(list_grades)    
+            sorted_dictionary = OrderedDict(sorted(dictionary.items() , key= lambda item : (item[1] ,item[0])))
+            list_keys = list(sorted_dictionary.keys())
+            list_values = list(sorted_dictionary.values())
+        for i in range (3) :
+            writer.writerow([sorted_dictionary[list_keys[i]]])
+
+
+def calculate_average_of_averages(input_file_name, output_file_name):
+    dictionary = OrderedDict()
+    with open(input_file_name , 'r') as f :
+        reader = csv.reader(f)
+        rows = list(reader)
+    with open(output_file_name , 'w' , newline='') as k :
+        writer = csv.writer(k)
+        for row in rows :
+            name = row[0]    
+            list_grades = []
+            for grade in row[1:] :
+                list_grades.append(float(grade))
+            dictionary[name] = mean(list_grades)    
+        list_values = list(dictionary.values())
+        general_average = mean(list_values)
+        writer.writerow([general_average])
+
+           
+
+
 if __name__ == "__main__" :   
     input_file = "grades.csv"
     calculate_averages( input_file , "averages.csv")
     calculate_sorted_averages( input_file , "sorted_averages.csv")
-    calculate_three_best( input_file , "three_best_avrages")
+    calculate_three_best( input_file , "three_best_avrages.csv")
+    calculate_three_worst( input_file , "three_worst_averages.csv")
+    calculate_average_of_averages( input_file , "average_of_avrage.csv")
